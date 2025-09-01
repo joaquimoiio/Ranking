@@ -60,6 +60,28 @@ button:hover {
     border-radius: 3px;
     cursor: pointer;
     border-left: 3px solid #007bff;
+    position: relative;
+}
+
+.item-card .edit-btn,
+.item-card .delete-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    font-size: 14px;
+    border-radius: 50%;
+}
+
+.item-card .edit-btn {
+    right: 45px;
+    background: #28a745;
+}
+
+.item-card .edit-btn:hover {
+    background: #218838;
 }
 
 .item-card:hover {
@@ -90,14 +112,28 @@ button:hover {
     flex: none;
 }
 
+.criteria-item button {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    font-size: 14px;
+    border-radius: 50%;
+}
+
 .delete-btn {
     background: #dc3545;
-    padding: 5px 8px;
-    font-size: 12px;
 }
 
 .delete-btn:hover {
     background: #c82333;
+}
+
+.edit-btn {
+    background: #28a745;
+}
+
+.edit-btn:hover {
+    background: #218838;
 }
 
 a {

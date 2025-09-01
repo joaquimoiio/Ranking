@@ -72,7 +72,10 @@ loginForm.addEventListener('submit', async (e) => {
         });
         
         if (response.ok) {
+            const data = await response.json();
             isLoggedIn = true;
+            localStorage.setItem('userId', data.userId);
+            localStorage.setItem('username', username);
             loginSection.style.display = 'none';
             mainApp.style.display = 'block';
             loadItems();
@@ -96,13 +99,15 @@ itemForm.addEventListener('submit', async (e) => {
     try {
         const response = await fetch(`${API_BASE}/items`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'user-id': localStorage.getItem('userId')
+            },
             body: JSON.stringify({ name, description }),
         });
         
         if (response.ok) {
             itemForm.reset();
-            loadItems();
         }
     } catch (e) {
         console.error('Erro:', e);
@@ -111,7 +116,9 @@ itemForm.addEventListener('submit', async (e) => {
 
 async function loadItems() {
     try {
-        const response = await fetch(`${API_BASE}/items`);
+        const response = await fetch(`${API_BASE}/items`, {
+            headers: { 'user-id': localStorage.getItem('userId') }
+        });
         const items = await response.json();
         
         itemsList.innerHTML = '';
@@ -124,11 +131,12 @@ async function loadItems() {
             itemCard.innerHTML = `
                 <h3>${item.name}</h3>
                 <p>${item.description || ''}</p>
+                <button class="edit-btn" onclick="editItem(${item.id}, '${item.name}', '${item.description || ''}')">✏️</button>
                 <button class="delete-btn" onclick="deleteItem(${item.id}, '${item.name}')">X</button>
             `;
 
             itemCard.addEventListener('click', (e) => {
-                if (e.target.classList.contains('delete-btn')) return;
+                if (e.target.classList.contains('delete-btn') || e.target.classList.contains('edit-btn')) return;
                 selectItem(item);
             });
 
@@ -158,7 +166,10 @@ criteriaForm.addEventListener('submit', async (e) => {
     try {
         const response = await fetch(`${API_BASE}/criteria`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'user-id': localStorage.getItem('userId')
+            },
             body: JSON.stringify({ item_id: selectedItemId, name }),
         });
         if (response.ok) {
@@ -172,7 +183,9 @@ criteriaForm.addEventListener('submit', async (e) => {
 
 async function loadCriteria(itemId) {
     try {
-        const response = await fetch(`${API_BASE}/items/${itemId}/criteria`);
+        const response = await fetch(`${API_BASE}/items/${itemId}/criteria`, {
+            headers: { 'user-id': localStorage.getItem('userId') }
+        });
         const criteria = await response.json();
         
         criteriaList.innerHTML = '';
@@ -183,6 +196,7 @@ async function loadCriteria(itemId) {
                 <span>${criterion.name}</span>
                 <input type="number" min="0" max="10" value="${criterion.score || 0}" 
                        onchange="updateScore(${criterion.id}, this.value)">
+                <button onclick="editCriteria(${criterion.id}, '${criterion.name}')">✏️</button>
                 <button onclick="deleteCriteria(${criterion.id})">X</button>
             `;
             criteriaList.appendChild(div);
@@ -196,7 +210,10 @@ async function deleteItem(id, name) {
     if (!confirm(`Excluir "${name}"?`)) return;
     
     try {
-        await fetch(`${API_BASE}/items/${id}`, { method: 'DELETE' });
+        await fetch(`${API_BASE}/items/${id}`, { 
+            method: 'DELETE',
+            headers: { 'user-id': localStorage.getItem('userId') }
+        });
         if (selectedItemId === id) {
             selectedItemId = null;
             criteriaSection.style.display = 'none';
@@ -214,7 +231,10 @@ async function updateScore(criteriaId, score) {
     try {
         await fetch(`${API_BASE}/criteria/${criteriaId}`, {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'user-id': localStorage.getItem('userId')
+            },
             body: JSON.stringify({ score: numScore }),
         });
     } catch (e) {
@@ -222,9 +242,46 @@ async function updateScore(criteriaId, score) {
     }
 }
 
+function editItem(id, name, description) {
+    const newName = prompt('Nome do item:', name);
+    if (!newName || newName.trim() === '') return;
+    
+    const newDescription = prompt('Descrição:', description);
+    
+    fetch(`${API_BASE}/items/${id}`, {
+        method: 'PATCH',
+        headers: { 
+            'Content-Type': 'application/json',
+            'user-id': localStorage.getItem('userId')
+        },
+        body: JSON.stringify({ name: newName.trim(), description: newDescription?.trim() || '' }),
+    }).then(response => {
+        if (response.ok) loadItems();
+    }).catch(e => console.error('Erro:', e));
+}
+
+function editCriteria(id, name) {
+    const newName = prompt('Nome do critério:', name);
+    if (!newName || newName.trim() === '') return;
+    
+    fetch(`${API_BASE}/criteria/${id}`, {
+        method: 'PATCH',
+        headers: { 
+            'Content-Type': 'application/json',
+            'user-id': localStorage.getItem('userId')
+        },
+        body: JSON.stringify({ name: newName.trim() }),
+    }).then(response => {
+        if (response.ok) loadCriteria(selectedItemId);
+    }).catch(e => console.error('Erro:', e));
+}
+
 async function deleteCriteria(id) {
     try {
-        await fetch(`${API_BASE}/criteria/${id}`, { method: 'DELETE' });
+        await fetch(`${API_BASE}/criteria/${id}`, { 
+            method: 'DELETE',
+            headers: { 'user-id': localStorage.getItem('userId') }
+        });
         loadCriteria(selectedItemId);
     } catch (e) {
         console.error('Erro:', e);
@@ -232,7 +289,9 @@ async function deleteCriteria(id) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (isLoggedIn) {
+    const savedUserId = localStorage.getItem('userId');
+    if (savedUserId) {
+        isLoggedIn = true;
         loginSection.style.display = 'none';
         mainApp.style.display = 'block';
         loadItems();

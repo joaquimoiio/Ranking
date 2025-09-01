@@ -10,34 +10,54 @@
     <div class="container">
         <h1>Sistema de Avaliação</h1>
         
-        <!-- Formulário para cadastrar item -->
-        <section class="form-section">
-            <h2>Cadastrar</h2>
-            <form id="itemForm">
-                <input type="text" id="itemName" placeholder="Nome" required>
-                <textarea id="itemDescription" placeholder="Descrição (opcional)"></textarea>
-                <button type="submit">Cadastrar Item</button>
-            </form>
+        <section class="form-section" id="loginSection">
+            <div id="loginDiv">
+                <h2>Login</h2>
+                <form id="loginForm">
+                    <input type="text" id="username" placeholder="Usuário" required>
+                    <input type="password" id="password" placeholder="Senha" required>
+                    <button type="submit">Entrar</button>
+                </form>
+                <p><a href="#" id="showRegister">Criar conta</a></p>
+            </div>
+            
+            <div id="registerDiv" style="display: none;">
+                <h2>Criar Conta</h2>
+                <form id="registerForm">
+                    <input type="text" id="newUsername" placeholder="Usuário" required>
+                    <input type="password" id="newPassword" placeholder="Senha" required>
+                    <button type="submit">Criar</button>
+                </form>
+                <p><a href="#" id="showLogin">Já tem conta? Entrar</a></p>
+            </div>
         </section>
 
-        <!-- Lista de itens -->
-        <section class="items-section">
-            <h2>Cadastrados</h2>
-            <div id="itemsList"></div>
-        </section>
+        <div id="mainApp" style="display: none;">
+            <section class="form-section">
+                <h2>Novo Item</h2>
+                <form id="itemForm">
+                    <input type="text" id="itemName" placeholder="Nome" required>
+                    <input type="text" id="itemDescription" placeholder="Descrição">
+                    <button type="submit">Adicionar</button>
+                </form>
+            </section>
 
-        <!-- Formulário para critérios (aparece quando item é selecionado) -->
-        <section class="criteria-section" id="criteriaSection" style="display: none;">
-            <h2>Critérios de Avaliação</h2>
-            <p>Item selecionado: <span id="selectedItemName"></span></p>
-            
-            <form id="criteriaForm">
-                <input type="text" id="criteriaName" placeholder="Nome do critério" required>
-                <button type="submit">Adicionar Critério</button>
-            </form>
-            
-            <div id="criteriaList"></div>
-        </section>
+            <section class="items-section">
+                <h2>Itens</h2>
+                <div id="itemsList"></div>
+            </section>
+
+            <section class="criteria-section" id="criteriaSection" style="display: none;">
+                <h2>Avaliação: <span id="selectedItemName"></span></h2>
+                
+                <form id="criteriaForm">
+                    <input type="text" id="criteriaName" placeholder="Critério" required>
+                    <button type="submit">+</button>
+                </form>
+                
+                <div id="criteriaList"></div>
+            </section>
+        </div>
     </div>
 
     <script src="script.js"></script>

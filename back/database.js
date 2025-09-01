@@ -1,29 +1,55 @@
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+const { Pool } = require('pg');
 
-const dbPath = path.join(__dirname, 'ranking.db');
-const db = new sqlite3.Database(dbPath);
-
-// Initialize tables
-db.serialize(() => {
-  db.run(`
-    CREATE TABLE IF NOT EXISTS items (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      description TEXT,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-  `);
-  
-  db.run(`
-    CREATE TABLE IF NOT EXISTS criteria (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      item_id INTEGER,
-      name TEXT NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (item_id) REFERENCES items (id) ON DELETE CASCADE
-    )
-  `);
+const pool = new Pool({
+  user: 'ranking',
+  host: 'localhost',
+  database: 'ranking',
+  password: 'ranking123',
+  port: 5432,
 });
 
-module.exports = db;
+async function initDB() {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(50) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS items (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        description TEXT,
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS criteria (
+        id SERIAL PRIMARY KEY,
+        item_id INTEGER REFERENCES items(id) ON DELETE CASCADE,
+        name VARCHAR(255) NOT NULL,
+        score NUMERIC DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    await pool.query(`
+      INSERT INTO users (username, password) VALUES ('admin', 'admin123')
+      ON CONFLICT (username) DO NOTHING
+    `);
+    
+    console.log('Banco inicializado');
+  } catch (err) {
+    console.error('Erro ao inicializar banco:', err);
+  }
+}
+
+initDB();
+
+module.exports = pool;

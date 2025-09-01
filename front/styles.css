@@ -6,91 +6,110 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
+    background: #f0f0f0;
+    padding: 20px;
 }
 
 .container {
-    max-width: 800px;
+    max-width: 600px;
     margin: 0 auto;
-    padding: 20px;
 }
 
 h1 {
     text-align: center;
-    margin-bottom: 30px;
-    color: #2c3e50;
-}
-
-h2 {
-    margin-bottom: 15px;
-    color: #34495e;
-}
-
-.form-section, .items-section, .criteria-section {
-    background: white;
-    padding: 20px;
     margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+section {
+    background: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
 }
 
 form {
     display: flex;
-    flex-direction: column;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
-input, textarea {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
+input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    flex: 1;
 }
 
 button {
-    padding: 10px;
-    background-color: #3498db;
+    padding: 8px 15px;
+    background: #007bff;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 3px;
     cursor: pointer;
-    font-size: 14px;
 }
 
 button:hover {
-    background-color: #2980b9;
+    background: #0056b3;
 }
 
 .item-card {
     background: #f8f9fa;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-    border-left: 4px solid #3498db;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 3px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    border-left: 3px solid #007bff;
 }
 
 .item-card:hover {
-    background-color: #e9ecef;
+    background: #e9ecef;
 }
 
 .item-card.selected {
-    background-color: #d4edda;
+    background: #d4edda;
     border-left-color: #28a745;
 }
 
 .criteria-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
     background: #f8f9fa;
-    padding: 10px;
-    margin-bottom: 5px;
-    border-radius: 4px;
-    border-left: 3px solid #17a2b8;
+    margin: 3px 0;
+    border-radius: 3px;
 }
 
-#selectedItemName {
-    font-weight: bold;
-    color: #28a745;
+.criteria-item span {
+    flex: 1;
+}
+
+.criteria-item input {
+    width: 60px;
+    flex: none;
+}
+
+.delete-btn {
+    background: #dc3545;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+
+.delete-btn:hover {
+    background: #c82333;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+p {
+    text-align: center;
+    margin-top: 10px;
 }

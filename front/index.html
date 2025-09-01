@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Avaliação</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Sistema de Avaliação</h1>
+        
+        <!-- Formulário para cadastrar item -->
+        <section class="form-section">
+            <h2>Cadastrar</h2>
+            <form id="itemForm">
+                <input type="text" id="itemName" placeholder="Nome" required>
+                <textarea id="itemDescription" placeholder="Descrição (opcional)"></textarea>
+                <button type="submit">Cadastrar Item</button>
+            </form>
+        </section>
+
+        <!-- Lista de itens -->
+        <section class="items-section">
+            <h2>Cadastrados</h2>
+            <div id="itemsList"></div>
+        </section>
+
+        <!-- Formulário para critérios (aparece quando item é selecionado) -->
+        <section class="criteria-section" id="criteriaSection" style="display: none;">
+            <h2>Critérios de Avaliação</h2>
+            <p>Item selecionado: <span id="selectedItemName"></span></p>
+            
+            <form id="criteriaForm">
+                <input type="text" id="criteriaName" placeholder="Nome do critério" required>
+                <button type="submit">Adicionar Critério</button>
+            </form>
+            
+            <div id="criteriaList"></div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

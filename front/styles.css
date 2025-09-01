@@ -145,6 +145,24 @@ a:hover {
     text-decoration: underline;
 }
 
+.header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.logout-btn {
+    background: #dc3545;
+    width: auto;
+    height: 35px;
+    padding: 0 15px;
+    border-radius: 5px;
+}
+
+.logout-btn:hover {
+    background: #c82333;
+}
+
 p {
     text-align: center;
     margin-top: 10px;

@@ -288,6 +288,16 @@ async function deleteCriteria(id) {
     }
 }
 
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('userId');
+    localStorage.removeItem('username');
+    isLoggedIn = false;
+    selectedItemId = null;
+    loginSection.style.display = 'block';
+    mainApp.style.display = 'none';
+    criteriaSection.style.display = 'none';
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     const savedUserId = localStorage.getItem('userId');
     if (savedUserId) {
